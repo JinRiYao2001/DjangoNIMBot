@@ -86,7 +86,7 @@
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        #send-btn, #generate-img-btn {
+        #send-btn, #generate-img-btn, #rag-btn {
             padding: 10px 20px;
             font-size: 16px;
             color: #fff;
@@ -98,8 +98,13 @@
             margin-left: 5px;
         }
 
-        #send-btn:hover, #generate-img-btn:hover {
+        #send-btn:hover, #generate-img-btn:hover, #rag-btn:hover {
             background-color: #0056b3;
+        }
+
+        #send-btn.disabled, #generate-img-btn.disabled, #rag-btn.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -108,37 +113,52 @@
         <div id="chatbox"></div>
         <div id="input-container">
             <input type="text" id="message-input" placeholder="Type your message...">
-            <button id="send-btn">Send</button>
+            <button id="send-btn">LLAMA-3</button>
             <button id="generate-img-btn">Generate Image</button>
+            <button id="rag-btn">RAG</button>
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            $('#send-btn').click(function() {
+            function toggleButtons(state) {
+                $('#send-btn, #generate-img-btn, #rag-btn').toggleClass('disabled', !state);
+                $('#send-btn, #generate-img-btn, #rag-btn').prop('disabled', !state);
+            }
+
+            function sendMessage(endpoint) {
                 var message = $('#message-input').val();
                 if (message.trim() !== "") {
                     $('#chatbox').append('<div class="message user"><div class="message-content">' + message + '</div></div>');
+                    toggleButtons(false);  // 按钮置灰
                     $.ajax({
-                        url: '/api/chat_api/chat/chat_llm/',
+                        url: endpoint,
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({ 'message': message }),
                         success: function(data) {
                             $('#chatbox').append('<div class="message bot"><div class="message-content">' + data.bot_response + '</div></div>');
                             $('#message-input').val('');
-                            $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight); // 自动滚动到底部
+                            $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                        },
+                        complete: function() {
+                            toggleButtons(true);  // 恢复按钮
                         }
                     });
                 }
+            }
+
+            $('#send-btn').click(function() {
+                sendMessage('/api/chat_api/chat/chat_llm/');
             });
 
             $('#generate-img-btn').click(function() {
                 var message = $('#message-input').val();
                 if (message.trim() !== "") {
                     $('#chatbox').append('<div class="message user"><div class="message-content">' + message + '</div></div>');
+                    toggleButtons(false);  // 按钮置灰
                     $.ajax({
-                        url: '/api/chat_api/chat/generate_image/',  // 假设这个是图像生成的API接口
+                        url: '/api/chat_api/chat/generate_image/',
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({ 'prompt': message }),
@@ -146,10 +166,17 @@
                             var imgTag = '<div class="message bot"><div class="message-content"><img src="data:image/png;base64,' + data.image_base64 + '" alt="Generated Image" /></div></div>';
                             $('#chatbox').append(imgTag);
                             $('#message-input').val('');
-                            $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight); // 自动滚动到底部
+                            $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                        },
+                        complete: function() {
+                            toggleButtons(true);  // 恢复按钮
                         }
                     });
                 }
+            });
+
+            $('#rag-btn').click(function() {
+                sendMessage('/api/chat_api/chat/chat_llm_rag/');
             });
 
             // 允许按Enter键发送消息

@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from chat.serializers import MessageSerializer
 from django.apps import apps
 
-from django_nimbot.settings import LLM_MODEL, NVIDIA_API_KEY
+from django_nimbot.settings import LLM_MODEL, NVIDIA_API_KEY, LLM_MODEL_RAG
 from .models import Message
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -17,10 +17,22 @@ from django.http import JsonResponse
 
 def get_bot_response(user_message):
     chat_config = apps.get_app_config('chat')
+    # CHAIN = (
+    #         {"context": chat_config.retriever, "question": RunnablePassthrough()}
+    #         | chat_config.prompt
+    #         | LLM_MODEL
+    #         | StrOutputParser()
+    # )
+    result = LLM_MODEL.invoke(user_message)
+    return result.content
+
+
+def get_bot_response_rag(user_message):
+    chat_config = apps.get_app_config('chat')
     CHAIN = (
             {"context": chat_config.retriever, "question": RunnablePassthrough()}
             | chat_config.prompt
-            | LLM_MODEL
+            | LLM_MODEL_RAG
             | StrOutputParser()
     )
     result = CHAIN.invoke(user_message)
@@ -56,6 +68,13 @@ class ChatViewSet(ModelViewSet):
     def chat_llm(self, request):
         user_message = request.data.get('message')
         bot_response = get_bot_response(user_message)
+        Message.objects.create(user_message=user_message, bot_response=bot_response)
+        return JsonResponse({"user_message": user_message, "bot_response": bot_response})
+
+    @action(detail=False, methods=["POST"], permission_classes=[])
+    def chat_llm_rag(self, request):
+        user_message = request.data.get('message')
+        bot_response = get_bot_response_rag(user_message)
         Message.objects.create(user_message=user_message, bot_response=bot_response)
         return JsonResponse({"user_message": user_message, "bot_response": bot_response})
 
