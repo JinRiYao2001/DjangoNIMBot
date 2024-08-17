@@ -45,6 +45,7 @@ RAG实现的关键代码就在day1课件的demo里，将它集成在整个项目
 -------
 项目部署的网页地址（之后会把ip换掉,这个机器没域名直接暴露公网ip太抽象了）
 http://175.24.132.143:8000/api/chat_ui/
+[NIM平台地址](https://build.nvidia.com/explore/discover)强烈推荐
 
 
 
