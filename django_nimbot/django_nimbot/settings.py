@@ -14,6 +14,12 @@ from pathlib import Path
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+import pymysql
+
+pymysql.install_as_MySQLdb()
+# TODO windows 环境下用这个去写入环境变量
+# from django_nimbot.scripts import set_environment_variables
+# set_environment_variables()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +33,7 @@ SECRET_KEY = "django-insecure-v+^7!610sxq4gtp$brg1eg-9b*tnix1s7vp^t^q&=y02ehaj=s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
