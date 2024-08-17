@@ -1,1 +1,2 @@
 # DjangoNIMBot
+通过调用nvidia nim平台的大模型api和django web框架实现的一个简单的ai对话应用
