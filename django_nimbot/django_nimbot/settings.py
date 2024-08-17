@@ -18,8 +18,8 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 # TODO windows 环境下用这个去写入环境变量
-# from django_nimbot.scripts import set_environment_variables
-# set_environment_variables()
+from django_nimbot.scripts import set_environment_variables
+set_environment_variables()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -137,4 +137,5 @@ NVIDIA_API_KEY = os.environ.get("NVIDIA_API_KEY")
 os.environ["NVIDIA_API_KEY"] = NVIDIA_API_KEY
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
 
-LLM_MODEL = ChatNVIDIA(model="ai-phi-3-small-128k-instruct", nvidia_api_key=NVIDIA_API_KEY, max_tokens=512)
+LLM_MODEL_RAG = ChatNVIDIA(model="ai-phi-3-small-128k-instruct", nvidia_api_key=NVIDIA_API_KEY, max_tokens=512)
+LLM_MODEL = ChatNVIDIA(model="meta/llama-3.1-405b-instruct", nvidia_api_key=NVIDIA_API_KEY, max_tokens=512)
