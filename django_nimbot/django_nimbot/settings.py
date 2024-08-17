@@ -17,6 +17,9 @@ from langchain_core.runnables import RunnablePassthrough
 import pymysql
 
 pymysql.install_as_MySQLdb()
+# TODO windows 环境下用这个去写入环境变量
+# from django_nimbot.scripts import set_environment_variables
+# set_environment_variables()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
