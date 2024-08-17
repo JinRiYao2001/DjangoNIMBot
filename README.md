@@ -25,8 +25,8 @@ linux系统在项目的DjangoNIMBot/django_nimbot目录下直接
 
 注意set_environ_variables.sh文件里的环境变量名字换成自己的、如果是window或者其他情况直接去settings.py里面写死这些值也行
 ```
-source set_environ_variables.sh
 pip install -r requirements.txt
+source set_environ_variables.sh
 python manage.py runserver
 ```
 然后访问http://127.0.0.1:8000/api/chat_ui/
