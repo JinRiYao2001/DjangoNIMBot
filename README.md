@@ -21,13 +21,13 @@ NVIDIA AI-AGENT夏季训练营
 -------
 整个项目代码在仓库中、我抽取了必要的依赖信息写在了requirements.txt文件里（可能有些落了依据报错信息也能很好的安装上）
 
-linux系统在项目的DjangoNIMBot/django_nimbot目录下直接
+linux系统在项目的DjangoNIMBot目录下直接
 ```
 pip install -r requirements.txt
-source set_environ_variables.sh
+python manage.py migrate
 python manage.py runserver
 ```
-注意set_environ_variables.sh文件里的环境变量名字换成自己的、如果是window或者其他情况直接去settings.py里面写死这些值也行
+会弹出一个输入框，在数据框中输入NIM平台申请的key
 
 然后访问http://127.0.0.1:8000/api/chat_ui/
 
