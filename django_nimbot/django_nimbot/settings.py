@@ -18,8 +18,13 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 # TODO windows 环境下用这个去写入环境变量
-from django_nimbot.scripts import set_environment_variables
-set_environment_variables()
+# from django_nimbot.scripts import set_environment_variables
+# set_environment_variables()
+if not os.environ.get('NVIDIA_API_KEY'):
+    print("输入NVIDIA_API_KEY:")
+    nv_key = input()
+    os.environ['NVIDIA_API_KEY'] = nv_key
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,15 +86,23 @@ WSGI_APPLICATION = "django_nimbot.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# TODO 如果有自己的mysql服务的话可以配置这边
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": os.environ.get("MYSQL_DATABASE_NAME", ""),
+#         "HOST": os.environ.get("MYSQL_HOST", ""),
+#         "PORT": os.environ.get("MYSQL_PORT", ""),
+#         "USER": os.environ.get("MYSQL_USER", ""),
+#         "PASSWORD": os.environ.get("MYSQL_PASSWORD", ""),
+#         "OPTIONS": {"charset": "utf8mb4"}
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get("MYSQL_DATABASE_NAME", ""),
-        "HOST": os.environ.get("MYSQL_HOST", ""),
-        "PORT": os.environ.get("MYSQL_PORT", ""),
-        "USER": os.environ.get("MYSQL_USER", ""),
-        "PASSWORD": os.environ.get("MYSQL_PASSWORD", ""),
-        "OPTIONS": {"charset": "utf8mb4"}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
