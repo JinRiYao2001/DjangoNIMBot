@@ -22,13 +22,13 @@ NVIDIA AI-AGENT夏季训练营
 整个项目代码在仓库中、我抽取了必要的依赖信息写在了requirements.txt文件里（可能有些落了依据报错信息也能很好的安装上）
 
 linux系统在项目的DjangoNIMBot/django_nimbot目录下直接
-
-注意set_environ_variables.sh文件里的环境变量名字换成自己的、如果是window或者其他情况直接去settings.py里面写死这些值也行
 ```
 pip install -r requirements.txt
 source set_environ_variables.sh
 python manage.py runserver
 ```
+注意set_environ_variables.sh文件里的环境变量名字换成自己的、如果是window或者其他情况直接去settings.py里面写死这些值也行
+
 然后访问http://127.0.0.1:8000/api/chat_ui/
 
 RAG实现的关键代码就在day1课件的demo里，将它集成在整个项目代码中，因为向量信息数据库只需要生成一次可以把这块代码封装在django工程的app load步骤中，这样只有启动工程的时候才会执行该步骤，提高效率。部署在了[部署地址](http://175.24.132.143:8000/api/chat_ui/)这个地址（公网IP之后我会更换掉）
@@ -54,7 +54,7 @@ RAG实现的关键代码就在day1课件的demo里，将它集成在整个项目
 
 附件与参考资料
 -------
-项目部署的网页地址（之后会把ip换掉,这个机器没域名直接暴露公网ip太抽象了）
+项目部署的网页地址可以访问尝试功能（不要开代理访问！之后会把ip换掉,这个机器没域名直接暴露公网ip太抽象了）
 * http://175.24.132.143:8000/api/chat_ui/
 * [NIM平台地址](https://build.nvidia.com/explore/discover)强烈推荐
 
